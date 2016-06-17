@@ -1,0 +1,72 @@
+void CGLRenderer::DrawPatchEarth(double R, int howMany)
+{
+	
+	float f2 = 2;
+	float korak = f2 / howMany;
+	double korak2 = 1.0 / howMany;
+
+	bool negativeNorm = true;
+
+	glLineWidth(2.0);
+	glPointSize(10);
+	float texCoordX = 0;
+	float texCoordY = 0;
+	glBegin(GL_TRIANGLE_STRIP);
+	for (float x = -1; x <= 1; x = x + korak)
+	{
+		texCoordX = 0;
+		for (float y = -1; y <= 1; y = y + korak)
+		{
+			//vrednosti tekuce tacke
+			float fiCurrent = atanf(x);
+			float tetaCurrent = atanf(y * cos(fiCurrent));
+			//vrednosti 'sledece' tacke (:.) => (::)
+			float fiNext = atanf(x + korak);
+			float tetaNext = atanf(y * cos(fiNext));
+
+			float x1 = R * cos(tetaCurrent)*sin(fiCurrent);
+			float y1 = R * cos(tetaCurrent)* cos(fiCurrent);
+			float z1 = R * sin(tetaCurrent);
+			
+			float x2 = R * cos(tetaNext)*sin(fiNext);
+			float y2 = R * cos(tetaNext)* cos(fiNext);
+			float z2 = R * sin(tetaNext);
+
+
+			glTexCoord2d(texCoordX, texCoordY);
+			glVertex3f(x1, y1, z1);
+			glTexCoord2d(texCoordX + korak2, texCoordY+korak2);
+			glVertex3f(x2, y2, z2);
+
+			texCoordX += korak2;
+		}
+		texCoordY += korak2;
+	}
+	glEnd();
+}
+
+//samo iscrtavanje u on draw
+
+glPushMatrix();
+
+	glEnable(GL_TEXTURE_2D);
+	textureEarthTop.Select();
+	DrawPatchEarth(3, 150);
+	glRotated(90, 1, 0, 0);
+	textureEarthFront.Select();
+	DrawPatchEarth(3, 150);
+	glRotated(90, 1, 0, 0);
+	textureEarthBottom.Select();
+	DrawPatchEarth(3, 150);
+	glRotated(90, 1, 0, 0);
+	textureEarthBack.Select();
+	DrawPatchEarth(3, 150);
+	glRotated(90, 1, 0, 0);
+	glRotated(90, 0, 0, 1);
+	textureEarthRight.Select();
+	DrawPatchEarth(3, 150);
+	glRotated(180, 0, 0, 1);
+	textureEarthLeft.Select();
+	DrawPatchEarth(3, 150);
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();

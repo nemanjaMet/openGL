@@ -1,0 +1,48 @@
+void openGLRenderer::DrawPatch2016(double r, double LonMin, double LatMin, double LonMax, double LatMax, double dLon, double dLat)
+{
+	r = 5;
+	LonMin = -10;
+	LonMax = 10;
+	LatMin = -10;
+	LatMax = 10;
+	dLon = 0.1;
+	dLat = 0.1;
+
+	glLineWidth(2.0);
+	glPointSize(10);
+	
+	int howMany = (LatMax - LatMin + LonMax - LonMin) / (dLat + dLon);
+	float texCoordX = 0;
+	float texCoordY = 0;
+	glBegin(GL_TRIANGLE_STRIP);
+	for (float x = LonMin; x <= LonMax; x = x + dLon)
+	{
+		texCoordX = 0;
+		for (float y = LatMin; y <= LatMax; y = y + dLat)
+		{
+			// vrednosti tekuce tacke
+			float fiCurrent = atanf(x);
+			float tetaCurrent = atanf(y * cos(fiCurrent));
+			// vrednosti sledece tacke
+			float fiNext = atanf(x + dLon);
+			float tetaNext = atanf(y * cos(fiNext));
+
+			float x1 = r * cos(tetaCurrent)*sin(fiCurrent);
+			float y1 = r * cos(tetaCurrent)*cos(fiCurrent);
+			float z1 = r * sin(tetaCurrent);
+
+			float x2 = r * cos(tetaNext) * sin(fiNext);
+			float y2 = r * cos(tetaNext)*cos(fiNext);
+			float z2 = r * sin(tetaNext);
+
+			glTexCoord2d(texCoordX, texCoordY);
+			glVertex3f(x1, y1, z1);
+			glTexCoord2d(texCoordX + dLat, texCoordY + dLon);
+			glVertex3f(x2, y2, z2);
+
+			texCoordX += dLon;
+		}
+		texCoordY += dLat;
+	}
+	glEnd();
+}

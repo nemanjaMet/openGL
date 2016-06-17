@@ -1,0 +1,114 @@
+void CGLRenderer::DrawCylindar(double r, double h, int aprox, bool closed = true)
+{
+	double ugaoStep = 2.0f * 3.1415926f / (double)aprox;
+	//double alfa = 0;
+	double x;
+	double y;
+	double z;
+	glBegin(GL_QUADS);
+	//int brojac = 0;
+	double alfa = 0;
+	for (int i = 0; i < aprox; i = i + 1)
+	{
+		alfa = i * ugaoStep;
+		x = r * cos(alfa);
+		z = r * sin(alfa);
+		double xNext = r * cos(alfa + ugaoStep);
+		double zNext = r * sin(alfa + ugaoStep);
+		vec3 donji(xNext-x, 0, zNext-z);
+		vec3 gornji(x-x,h,z-z);
+		vec3 normala = donji.cross(donji, gornji);
+		normala.normalize();
+		glNormal3d(normala.x,normala.y,normala.z);
+		
+		glVertex3d(xNext, h, zNext);
+		glVertex3d(xNext, 0, zNext);
+		
+		glVertex3d(x, 0, z);
+		glVertex3d(x, h, z);
+		
+		//brojac++;
+	}
+	
+	glEnd();
+
+	//top cover
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex3d(0,h,0);
+	for (int i = 0; i < aprox; i = i + 1)
+	{
+		alfa = i * ugaoStep;
+		x = r * cos(alfa);
+		z = r * sin(alfa);
+		//double xNext = r * cos(alfa + ugaoStep);
+		//double zNext = r * sin(alfa + ugaoStep);
+		/*vec3 donji(xNext - x, 0, zNext - z);
+		vec3 gornji(x - x, h, z - z);
+		vec3 normala = donji.cross(donji, gornji);
+		normala.normalize();
+		*/
+		glNormal3d(0, 1, 0);
+
+		//glVertex3d(xNext, h, zNext);
+		//glVertex3d(xNext, 0, zNext);
+
+		//glVertex3d(x, 0, z);
+		glVertex3d(x, h, z);
+
+		//brojac++;
+	}
+	x = r * cos(alfa + ugaoStep);
+	z = r * sin(alfa + ugaoStep);
+	glVertex3d(x, h, z);
+	glEnd();
+	//int type = 2;
+	//double step = aprox;
+	//if (type != 1)
+	//	glDisable(GL_TEXTURE_2D);
+
+	//double a_s = 0;
+	//double a_of = 360 / step;
+
+	//double w = 2 * r * 3.14 / step;
+
+	//double tex_e = 0.25;
+
+	//double tex_s = 0.5;
+
+	//double d_tex = (tex_s - tex_e) / step;
+
+	//for (int i = 0; i < step; i++)
+	//{
+	//	glPushMatrix();
+	//	glRotatef(a_s, 0, 1, 0);
+	//	glTranslatef(0.0, 0.0, -r);
+
+	//	//------
+	//	glBegin(GL_QUADS);
+	//	glNormal3f(0.0, 0.0, -1.0);
+
+	//	if (type == 1)
+	//		glTexCoord2d(tex_s, tex_s);
+	//	glVertex3f(w / 2, h / 2, 0);
+
+	//	if (type == 1)
+	//		glTexCoord2d(tex_s, 0.0);
+	//	glVertex3f(w / 2, -h / 2, 0);
+
+	//	if (type == 1)
+	//		glTexCoord2d(tex_s - d_tex, 0.0);
+	//	glVertex3f(-w / 2, -h / 2, 0);
+
+	//	if (type == 1)
+	//		glTexCoord2d(tex_s - d_tex, tex_s - d_tex);
+	//	glVertex3f(-w / 2, h / 2, 0);
+
+	//	glEnd();
+	//	//-------
+
+	//	glPopMatrix();
+
+	//	a_s += a_of;
+
+	//	tex_s -= d_tex;
+	}

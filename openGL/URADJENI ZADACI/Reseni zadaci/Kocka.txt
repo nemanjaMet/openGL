@@ -1,0 +1,40 @@
+void CGLRenderer::DrawCube(double a,double t0,double t1,double s0,double s1)
+{
+	
+	Material(1.0, 0, 0);
+	glPushMatrix();
+	glTranslatef(0, 0, a / 2);
+	DrawSide(a,0,1,1,0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, -a / 2);
+	DrawSide(a, 0, 1, 0, 1);
+	glPopMatrix();
+
+	Material(1.0, 1.0, 1.0);
+	glPushMatrix();
+	glTranslatef(0, a / 2, 0);
+	glRotatef(90, 1, 0, 0);
+	DrawSide(a,1, 0, 0, 1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -a / 2, 0);
+	glRotatef(-90, 1, 0, 0);
+	DrawSide(a,0, 1, 1, 0);
+	glPopMatrix();
+
+	Material(0.0, 0.0, 1.0);
+	glPushMatrix();
+	glTranslatef(a / 2, 0, 0);
+	glRotatef(-90, 0, 1, 0);
+	DrawSide(a, t0, t1, s0, s1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-a / 2, 0, 0);
+	glRotatef(90, 0, 1, 0);
+	DrawSide(a, 0, 1, 0, 1);
+	glPopMatrix();
+}

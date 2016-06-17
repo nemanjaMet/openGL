@@ -1,0 +1,26 @@
+﻿  stdafx.cpp
+  ViewTree.cpp
+  vec3.cpp
+  PropertiesWnd.cpp
+  OutputWnd.cpp
+  openGLView.cpp
+  openGLRenderer.cpp
+e:\github\opengl\opengl\opengl\openglrenderer.cpp(868): warning C4101: 'y': unreferenced local variable
+e:\github\opengl\opengl\opengl\openglrenderer.cpp(932): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+e:\github\opengl\opengl\opengl\openglrenderer.cpp(938): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+  openGLMaterial.cpp
+e:\github\opengl\opengl\opengl\openglmaterial.cpp(8): warning C4305: '=': truncation from 'double' to 'float'
+e:\github\opengl\opengl\opengl\openglmaterial.cpp(9): warning C4305: '=': truncation from 'double' to 'float'
+e:\github\opengl\opengl\opengl\openglmaterial.cpp(10): warning C4305: '=': truncation from 'double' to 'float'
+e:\github\opengl\opengl\opengl\openglmaterial.cpp(13): warning C4305: '=': truncation from 'double' to 'float'
+e:\github\opengl\opengl\opengl\openglmaterial.cpp(14): warning C4305: '=': truncation from 'double' to 'float'
+e:\github\opengl\opengl\opengl\openglmaterial.cpp(15): warning C4305: '=': truncation from 'double' to 'float'
+  openGLDoc.cpp
+  openGL.cpp
+  opengGLTexture.cpp
+  MainFrm.cpp
+  FileView.cpp
+  DImage.cpp
+  ClassView.cpp
+  Generating Code...
+  openGL.vcxproj -> E:\GitHub\openGL\openGL\Debug\openGL.exe

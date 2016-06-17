@@ -1,0 +1,126 @@
+void CGLRenderer::Side(double a, double b,double h,double t0,double t1,double s0,double s1)
+{
+	glBegin(GL_QUADS);
+
+	glNormal3d(0.0, 0.0, -1.0);
+
+	glTexCoord2d(s1, t0);
+	glVertex2d(a / 2, h / 2);
+
+	glTexCoord2d(s1, t1);
+	glVertex2d(b / 2, -h / 2);
+
+	glTexCoord2d(s0, t1);
+	glVertex2d(-b / 2, -h / 2);
+
+	glTexCoord2d(s0, t0);
+	glVertex2d(-a / 2, h / 2);
+
+	glEnd();
+
+}
+
+void CGLRenderer::TR_Pyramid(double r1, double r2, double H,double step,double t0,double t1,double s0,double s1)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, slika);
+	double a_s = 0.0;
+	double a_of = 360 / step;
+
+	double w1 = r1 * 2 * 3.14 / step;
+	double w2 = r2 * 2 * 3.14 / step;
+
+	double dr = r2 - r1;
+	double h1 = sqrtf(H*H + dr*dr);
+
+	double a_nag = atan(dr / H);
+	a_nag *= 180 / 3.14;
+
+	double offset = sqrtf(h1*h1 - H*H) / 2;
+
+	double tex_s = 1.0;
+	double tex_t = t1 - t0;
+	double tex_of = 1.0 / step;
+	
+
+	for (int i = 0;i < step;i++)
+	{
+		glPushMatrix();
+
+		glRotatef(a_s, 0, 1, 0);
+		glTranslatef(0.0, 0.0, -offset -r1);
+		glRotatef(a_nag, 1, 0, 0);
+		Side(w1, w2, h1,t0,t1,tex_s - tex_of,tex_s);
+
+		glPopMatrix();
+
+		a_s += a_of;
+		tex_s -= tex_of;
+	}
+	glDisable(GL_TEXTURE_2D);
+}
+
+void CGLRenderer::DrawSphere1(double r, double slices, double stacks)
+{
+	glPushMatrix();
+	glTranslatef(0.0, -r*2 / stacks, 0.0);
+	DrawSphere(r, slices, stacks,true);
+	glPopMatrix();
+
+	glPushMatrix();
+
+	glRotatef(180, 0.0, 0.0, 1.0);
+	DrawSphere(r, slices, stacks,true);
+
+	glPopMatrix();
+}
+
+void CGLRenderer::DrawSphere(double r, double slices, double stacks,bool type)
+{
+	//double dr1 = 0.5 * r * 3.14 / stacks;
+	//double dr2 = r / stacks;
+
+
+	double a_s = 90 / stacks;
+	double a_of = a_s;
+	double stepen = 3.14 / 180;
+	
+	double r2 = r;
+	double r1 = r * cos(a_s * stepen);
+	double dh = r * sin (a_s *  stepen);
+	double offset = dh / 2;
+	double prev_h = 0;
+
+	double tex_s = 1.0;
+	double tex_of = 0.5 / stacks;
+	double tex_t;
+	if (type)
+		 tex_t = 0.0;
+	else
+		 tex_t = 1.0;
+
+	for (int i = 0;i < stacks;i++)
+	{
+		glPushMatrix();
+		if(i==0)
+			glTranslatef(0.0, dh / 2, 0.0);
+		glTranslatef(0.0, offset, 0.0);
+		if(type)
+			TR_Pyramid(r1, r2, dh, slices,tex_t - tex_of ,tex_t,0,1);
+		else
+			TR_Pyramid(r1, r2, dh, slices, tex_t, tex_t + tex_of, 0, 1);
+		glPopMatrix();
+
+		a_s += a_of;
+		r2 = r1;
+		r1 = r*cos(a_s * stepen);
+		dh = r*sin(a_s * stepen) - prev_h;
+		prev_h = r*sin(a_s * stepen);
+		offset += dh;
+		if(type)
+			tex_t -= tex_of;
+		else
+			tex_t += tex_of;
+	}
+	
+}

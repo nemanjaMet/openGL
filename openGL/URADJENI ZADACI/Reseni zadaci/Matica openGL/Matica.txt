@@ -1,0 +1,153 @@
+void CGLRenderer::Draw3DTrapez(float a, float b, float h, float H)
+{
+	float chunk = (a - b) / 2;
+	float hipotenuza = sqrt(chunk*chunk + h*h);
+	glBegin(GL_QUADS);
+
+	//bottom
+	glNormal3f(0,-1,0);
+
+	glVertex3f(0, 0, 0);
+	glVertex3f(a, 0, 0);
+	glVertex3f(a, 0, H);
+	glVertex3f(0, 0, H);
+
+	//top
+	glNormal3f(0,1,0);
+
+	glVertex3f((a - b) / 2, h, 0);
+	glVertex3f((a - b) / 2, h, H);
+	glVertex3f((a - b) / 2 + b, h, H);
+	glVertex3f((a - b) / 2 + b, h, 0);
+	
+	//front
+	glNormal3f(0, 0, 1);
+
+	glVertex3f((a - b) / 2, h, H);
+	glVertex3f(0, 0, H);
+	glVertex3f(a, 0, H);
+	glVertex3f((a - b) / 2 + b, h, H);
+
+	//back
+
+	glNormal3f(0, 0, -1);
+
+	glVertex3f(0, 0, 0);
+	glVertex3f((a - b) / 2, h, 0);
+	glVertex3f((a - b) / 2 + b, h, 0);
+	glVertex3f(a, 0 , 0);
+
+	glEnd();
+
+	float ugao = asin(h / hipotenuza) * 180 / 3.14159265;
+	//left
+	glPushMatrix();
+	glRotatef(ugao, 0, 0, 1);
+
+	glBegin(GL_QUADS);
+	
+
+	glNormal3f(0, 1, 0);
+
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, H);
+	glVertex3f(hipotenuza, 0, H);
+	glVertex3f(hipotenuza, 0, 0);
+
+	glEnd();
+	glPopMatrix();
+
+	//right
+	ugao = 180 - ugao;
+	glPushMatrix();
+	glTranslatef(a, 0, 0);
+	glRotatef(ugao, 0, 0, 1);
+	
+	glBegin(GL_QUADS);
+
+
+	glNormal3f(0, -1, 0);
+
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, H);
+	glVertex3f(hipotenuza, 0, H);
+	glVertex3f(hipotenuza, 0, 0);
+
+	glEnd();
+	glPopMatrix();
+}
+
+void CGLRenderer::DrawBolt()
+{
+	float a = 8;
+	float b = 4;
+	float h;
+	float H = 4;
+	//racunica da h odgovara i ugao odgovaraju
+
+	float chunk = (a - b) / 2;
+	float hipotenuza = (a - b);
+	h = sqrt(hipotenuza*hipotenuza - chunk*chunk);
+	
+	//ugao u katetama
+	float ugao = asin(h / hipotenuza) * 180 / 3.14159265;
+	//def trapez u pozitivnoj osi
+	Draw3DTrapez(a, b, h, H);
+	/////
+
+	////desni rotiran za 60stepeni
+	glPushMatrix();
+
+		glTranslatef(a, 0, 0);
+		glRotatef(60, 0, 0, 1);
+		Draw3DTrapez(a, b, h, H);
+
+	glPopMatrix();
+	////
+	///levi rotiran za 120 i pomeren za visinu produzenog trougla i za odsecak (a-b)
+	glPushMatrix();
+
+	glTranslatef(a + hipotenuza, a*sqrt(3.0f)/2, 0);
+	glRotatef(120, 0, 0, 1);
+	Draw3DTrapez(a, b, h, H);
+
+	glPopMatrix();
+
+	//// smetrija ova dva (rotiranje za 180 step u odnosu na 180 osu i translacija da se poklope ( za a i H )
+	glPushMatrix();
+		glTranslatef(a, 0, H);
+		glRotatef(180, 0, 1, 0);
+		glPushMatrix();
+	
+			glTranslatef(a, 0, 0);
+			glRotatef(60, 0, 0, 1);
+			Draw3DTrapez(a, b, h, H);
+
+		glPopMatrix();
+
+
+		glPushMatrix();
+
+			glTranslatef(a + hipotenuza, a*sqrt(3.0f) / 2, 0);
+			glRotatef(120, 0, 0, 1);
+			Draw3DTrapez(a, b, h, H);
+
+		glPopMatrix();
+	glPopMatrix();
+	////
+
+	//gornji trapezoid 
+	glPushMatrix();
+
+		glTranslatef(0, a*sqrt(3.0f), H);
+		glRotatef(180, 1, 0, 0);
+		Draw3DTrapez(a, b, h, H);
+	
+	glPopMatrix();
+
+	/*glPushMatrix();
+	glRotatef(-60, 0, 0, 1);
+	Draw3DTrapez(a, b, h, H);
+	glPopMatrix();*/
+
+}

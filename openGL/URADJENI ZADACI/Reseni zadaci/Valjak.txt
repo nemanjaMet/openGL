@@ -1,0 +1,52 @@
+void CGLRenderer::Cylinder(double r, double h, double step,int type)
+{
+	if (type != 1)
+		glDisable(GL_TEXTURE_2D);
+
+	double a_s = 0;
+	double a_of = 360 / step;
+
+	double w = 2 * r * 3.14 / step;
+
+	double tex_e = 0.25;
+
+	double tex_s = 0.5;
+
+	double d_tex = (tex_s - tex_e) / step;
+
+	for (int i = 0;i < step;i++)
+	{
+		glPushMatrix();
+		glRotatef(a_s, 0, 1, 0);
+		glTranslatef(0.0, 0.0, -r);
+
+		//------
+		glBegin(GL_QUADS);
+		glNormal3f(0.0, 0.0, -1.0);
+
+		if (type == 1)
+			glTexCoord2d(tex_s, tex_s);
+		glVertex3f(w / 2, h / 2, 0);
+
+		if (type == 1)
+			glTexCoord2d(tex_s, 0.0);
+		glVertex3f(w / 2, -h / 2, 0);
+
+		if (type == 1)
+			glTexCoord2d(tex_s - d_tex, 0.0);
+		glVertex3f(-w / 2, -h / 2, 0);
+
+		if (type == 1)
+			glTexCoord2d(tex_s - d_tex, tex_s - d_tex);
+		glVertex3f(-w / 2, h / 2, 0);
+
+		glEnd();
+		//-------
+
+		glPopMatrix();
+
+		a_s += a_of;
+
+		tex_s -= d_tex;
+	}
+}
